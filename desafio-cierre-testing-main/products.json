@@ -1,0 +1,17 @@
+[{
+    "ID":          "first",
+    "SellerID":    "jaimito",
+    "Description": "pastel de pollo",
+    "Price":       2300.0
+},
+{
+    "ID":          "second",
+    "SellerID":    "jaimito",
+    "Description": "chococono",
+    "Price":       2300.0
+}, {
+    "ID":          "third",
+    "SellerID":    "josue",
+    "Description": "chocorramo",
+    "Price":       2300.0
+}]
