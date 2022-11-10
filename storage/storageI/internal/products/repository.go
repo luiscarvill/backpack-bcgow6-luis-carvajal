@@ -29,8 +29,7 @@ type repository struct {
 // - Implementar el método de forma que con el string recibido lo use para buscar en la DB por el campo “name”.
 
 func (r *repository) GetByName(name string) (domains.Product, error) {
-	getQuery := "SELECT id, name, type, count, price FROM products WHERE name = ?;"
-	stmt, err := r.db.Prepare(getQuery)
+	stmt, err := r.db.Prepare(GET_BY_NAME_QUERY)
 	if err != nil {
 		return domains.Product{}, fmt.Errorf("Error en la consulta:  %v", err)
 	}
@@ -50,8 +49,7 @@ func (r *repository) GetByName(name string) (domains.Product, error) {
 // - Implementar el método Store.
 
 func (r *repository) Store(p domains.Product) (int, error) {
-	storeQuery := "INSERT INTO products (name, type, count, price) VALUES (?,?,?,?)"
-	stmt, err := r.db.Prepare(storeQuery)
+	stmt, err := r.db.Prepare(INSERT_QUERY)
 	if err != nil {
 		return 0, fmt.Errorf("Error en la consulta: %v", err)
 	}
@@ -77,8 +75,7 @@ func (r *repository) Store(p domains.Product) (int, error) {
 
 func (r *repository) GetAll() ([]domains.Product, error) {
 	var products []domains.Product
-	getQuery := "SELECT id, name, type, count, price FROM products"
-	rows, err := r.db.Query(getQuery)
+	rows, err := r.db.Query(GET_ALL_QUERY)
 	if err != nil {
 		return []domains.Product{}, fmt.Errorf("Error en la consulta:  %v", err)
 	}
@@ -101,8 +98,10 @@ func (r *repository) GetAll() ([]domains.Product, error) {
 // Dentro del archivo repository desarrollar el método Delete().
 // Comprobar el correcto funcionamiento.
 func (r *repository) Delete(id int) error {
-	deleteQuery := "DELETE FROM products WHERE id = ?"
-	stmt, err := r.db.Prepare(deleteQuery)
+	if id < 0 {
+		return fmt.Errorf("Error en delete: ID can't be less than 0")
+	}
+	stmt, err := r.db.Prepare(DELETE_QUERY)
 	if err != nil {
 		return fmt.Errorf("Error en delete: %v", err)
 	}
@@ -117,8 +116,8 @@ func (r *repository) Delete(id int) error {
 }
 
 func (r *repository) GetById(id int) bool {
-	getQuery := "SELECT id, name, type, count, price FROM products WHERE id = ?"
-	stmt, err := r.db.Prepare(getQuery)
+
+	stmt, err := r.db.Prepare(GET_BY_ID_QUERY)
 	if err != nil {
 		return false
 	}
